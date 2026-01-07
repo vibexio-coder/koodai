@@ -1,27 +1,66 @@
 import React from 'react';
-import { ShoppingBag, Store, ShoppingCart, User } from 'lucide-react';
+import { Home, Package, ShoppingCart, User, Heart } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { Screen } from '../types';
 
 interface BottomNavProps {
-  currentScreen: string;
-  onNavigate: (screen: any) => void;
+  currentScreen: Screen;
+  onNavigate: (screen: Screen) => void;
   cartCount: number;
+  wishlistCount?: number;
 }
 
-export function BottomNav({ currentScreen, onNavigate, cartCount }: BottomNavProps) {
+export function BottomNav({ 
+  currentScreen, 
+  onNavigate, 
+  cartCount, 
+  wishlistCount = 0 
+}: BottomNavProps) {
   const { t } = useLanguage();
 
-  const getButtonClass = (screenName: string) => {
+  const navItems = [
+    {
+      screen: 'home' as Screen,
+      icon: Home,
+      label: t('home') || 'Home',
+    },
+    {
+      screen: 'orders' as Screen,
+      icon: Package,
+      label: t('orders') || 'Orders',
+    },
+    {
+      screen: 'wishlist' as Screen,
+      icon: Heart,
+      label: t('wishlist') || 'Wishlist',
+      badge: wishlistCount > 0 ? wishlistCount : undefined,
+    },
+    {
+      screen: 'cart' as Screen,
+      icon: ShoppingCart,
+      label: t('cart') || 'Cart',
+      badge: cartCount > 0 ? cartCount : undefined,
+    },
+    {
+      screen: 'profile' as Screen,
+      icon: User,
+      label: t('profile') || 'Profile',
+    },
+  ];
+
+  const getButtonClass = (screenName: Screen) => {
     const isActive = currentScreen === screenName;
-    return isActive ? "w-10 h-10 bg-yellow-400 rounded-xl flex items-center justify-center" : "w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center";
+    return isActive 
+      ? "w-10 h-10 bg-yellow-400 rounded-xl flex items-center justify-center" 
+      : "w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center";
   };
   
-  const getIconClass = (screenName: string) => {
+  const getIconClass = (screenName: Screen) => {
     const isActive = currentScreen === screenName;
     return isActive ? "w-5 h-5 text-black" : "w-5 h-5 text-gray-600";
   };
   
-  const getTextClass = (screenName: string) => {
+  const getTextClass = (screenName: Screen) => {
     const isActive = currentScreen === screenName;
     return isActive ? "text-xs text-black font-medium" : "text-xs text-gray-600";
   };
@@ -29,50 +68,32 @@ export function BottomNav({ currentScreen, onNavigate, cartCount }: BottomNavPro
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 shadow-lg z-50">
       <div className="flex items-center justify-around max-w-md mx-auto">
-        <button 
-          onClick={() => onNavigate('home')}
-          className="flex flex-col items-center gap-1"
-        >
-          <div className={getButtonClass('home')}>
-            <ShoppingBag className={getIconClass('home')} />
-          </div>
-          <span className={getTextClass('home')}>{t('home')}</span>
-        </button>
-
-        <button
-          onClick={() => onNavigate('orders')}
-          className="flex flex-col items-center gap-1"
-        >
-          <div className={getButtonClass('orders')}>
-            <Store className={getIconClass('orders')} />
-          </div>
-          <span className={getTextClass('orders')}>{t('orders')}</span>
-        </button>
-
-        <button
-          onClick={() => onNavigate('cart')}
-          className="flex flex-col items-center gap-1 relative"
-        >
-          <div className={getButtonClass('cart')}>
-            <ShoppingCart className={getIconClass('cart')} />
-          </div>
-          {cartCount > 0 && (
-            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-              <span className="text-xs text-white">{cartCount}</span>
+        {navItems.map((item) => (
+          <button
+            key={item.screen}
+            onClick={() => onNavigate(item.screen)}
+            className="flex flex-col items-center gap-1 relative"
+          >
+            <div className={getButtonClass(item.screen)}>
+              <item.icon className={getIconClass(item.screen)} />
             </div>
-          )}
-          <span className={getTextClass('cart')}>{t('cart')}</span>
-        </button>
-
-        <button
-          onClick={() => onNavigate('profile')}
-          className="flex flex-col items-center gap-1"
-        >
-          <div className={getButtonClass('profile')}>
-            <User className={getIconClass('profile')} />
-          </div>
-          <span className={getTextClass('profile')}>{t('profile')}</span>
-        </button>
+            
+            {/* Badge for Cart and Wishlist */}
+            {(item.badge !== undefined && item.badge > 0) && (
+              <div className={`absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center ${
+                item.screen === 'cart' ? 'bg-red-500' : 'bg-red-500'
+              }`}>
+                <span className="text-xs text-white">
+                  {item.badge > 9 ? '9+' : item.badge}
+                </span>
+              </div>
+            )}
+            
+            <span className={getTextClass(item.screen)}>
+              {item.label}
+            </span>
+          </button>
+        ))}
       </div>
     </div>
   );

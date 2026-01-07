@@ -8,6 +8,7 @@ export type Screen =
     | 'products'
     | 'productDetail'
     | 'cart'
+    | 'wishlist'
     | 'checkout'
     | 'orderTracking'
     | 'orders'
@@ -22,6 +23,15 @@ export interface CartItem {
     price: number;
     quantity: number;
     image: string;
+}
+
+export interface WishlistItem {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  category?: string;
+  storeName?: string;
 }
 
 export interface NavigationState {
