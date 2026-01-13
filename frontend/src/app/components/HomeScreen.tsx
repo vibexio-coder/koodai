@@ -43,7 +43,6 @@ const iconMap: { [key: string]: React.ElementType } = {
   Package,
   Utensils,
   Heart,
-  // Map Firestore icon names to Lucide icons
   "shopping-bag": ShoppingBag,
   store: Store,
   apple: Apple,

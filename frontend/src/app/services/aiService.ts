@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
+
 export interface Ingredient {
     id: string;
     name: string;

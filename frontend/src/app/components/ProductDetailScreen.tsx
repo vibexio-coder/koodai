@@ -730,36 +730,6 @@ export function ProductDetailScreen({
               </div>
             </div>
 
-            {/* Quantity Selector */}
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Quantity</h3>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200"
-                  >
-                    <Minus className="w-5 h-5 text-gray-700" />
-                  </button>
-                  <span className="text-xl font-bold text-gray-900 min-w-[40px] text-center">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200"
-                  >
-                    <Plus className="w-5 h-5 text-gray-700" />
-                  </button>
-                </div>
-              </div>
-              
-              {/* Total Price */}
-              <div className="text-right">
-                <p className="text-sm text-gray-600">Total</p>
-                <p className="text-2xl font-bold text-gray-900">{formatPrice(productData.price * quantity)}</p>
-              </div>
-            </div>
-
             {/* Category-specific details */}
             {renderCategorySpecificDetails()}
 
